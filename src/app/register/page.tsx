@@ -47,7 +47,22 @@ const Registration: React.FC = () => {
     }));
   };
 
-  // const handleSubmit = async () => {};
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    try {
+      // Here you would typically make your API call
+      const registrationData = {
+        name: formData.name.trim(),
+        userName: formData.userName.trim(),
+        email: formData.email.trim(),
+        password: formData.password,
+        role: formData.role,
+      };
+      await registrationAction(registrationData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
@@ -61,7 +76,7 @@ const Registration: React.FC = () => {
         </CardHeader>
 
         <CardContent>
-          <form action={registrationAction} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             {/* Name Field */}
             <div className="space-y-2">
               <Label htmlFor="name">Full Name *</Label>
