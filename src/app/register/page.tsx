@@ -19,8 +19,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
 import { Lock, Mail, User, UserCheck } from "lucide-react";
+import { registrationAction } from "./registrationAction.action";
 interface RegistrationFormData {
   name: string;
   userName: string;
@@ -47,7 +47,7 @@ const Registration: React.FC = () => {
     }));
   };
 
-  const handleSubmit = async () => {};
+  // const handleSubmit = async () => {};
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
@@ -61,7 +61,7 @@ const Registration: React.FC = () => {
         </CardHeader>
 
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form action={registrationAction} className="space-y-6">
             {/* Name Field */}
             <div className="space-y-2">
               <Label htmlFor="name">Full Name *</Label>
