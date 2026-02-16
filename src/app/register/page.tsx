@@ -19,8 +19,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
 import { Lock, Mail, User, UserCheck } from "lucide-react";
+import { registrationAction } from "./registrationAction.action";
 interface RegistrationFormData {
   name: string;
   userName: string;
@@ -47,7 +47,22 @@ const Registration: React.FC = () => {
     }));
   };
 
-  const handleSubmit = async () => {};
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    try {
+      // Here you would typically make your API call
+      const registrationData = {
+        name: formData.name.trim(),
+        userName: formData.userName.trim(),
+        email: formData.email.trim(),
+        password: formData.password,
+        role: formData.role,
+      };
+      await registrationAction(registrationData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
