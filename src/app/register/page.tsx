@@ -19,6 +19,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { toast } from "sonner";
 import { Lock, Mail, User, UserCheck } from "lucide-react";
 import { registrationAction } from "./registrationAction.action";
 interface RegistrationFormData {
@@ -60,9 +61,11 @@ const Registration: React.FC = () => {
       };
 
       if (formData.password !== formData.confirmPassword)
-        return alert("Password are not matching");
+        return toast.error("Password are not matching");
 
-      await registrationAction(registrationData);
+      const result = await registrationAction(registrationData);
+      if (result.status === "SUCCESS") toast.success(result.message);
+      else toast.error(result.message);
     } catch (error) {
       console.log(error);
     }
