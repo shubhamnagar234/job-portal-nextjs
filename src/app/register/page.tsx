@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/card";
 import { toast } from "sonner";
 import { Lock, Mail, User, UserCheck } from "lucide-react";
-import { registrationAction } from "./registrationAction.action";
+import { registrationAction } from "@/features/auth/server/auth.actions"; 
 interface RegistrationFormData {
   name: string;
   userName: string;
