@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,6 +13,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Lock, Mail, UserCheck } from "lucide-react";
+import { toast } from "sonner";
+import { loginUserAction } from "@/features/auth/server/auth.actions";
 
 interface LoginFormData {
   email: string;
@@ -32,7 +34,22 @@ const LoginForm: React.FC = () => {
     }));
   };
 
-  const handleSubmit = async () => {};
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    try {
+      // Here you would typically make your API call
+      const loginData = {
+        email: formData.email.trim(),
+        password: formData.password,
+      };
+
+      const result = await loginUserAction(loginData);
+      if (result.status === "SUCCESS") toast.success(result.message);
+      else toast.error(result.message);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
@@ -59,9 +76,7 @@ const LoginForm: React.FC = () => {
                   placeholder="Enter your email"
                   required
                   value={formData.email}
-                  onChange={(e) =>
-                    handleInputChange("email", e.target.value)
-                  }
+                  onChange={(e) => handleInputChange("email", e.target.value)}
                   className={`pl-10 `}
                 />
               </div>
@@ -90,8 +105,7 @@ const LoginForm: React.FC = () => {
                   variant="ghost"
                   size="sm"
                   className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                >
-                </Button>
+                ></Button>
               </div>
             </div>
 
