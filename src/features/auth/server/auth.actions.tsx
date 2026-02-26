@@ -4,6 +4,7 @@ import { db } from "@/config/db";
 import { users } from "@/drizzle/schema";
 import argon2 from "argon2";
 import { eq, or } from "drizzle-orm";
+import { registerUserSchema } from "../auth.schema";
 
 export type RegistrationData = {
   name: string;
@@ -20,8 +21,16 @@ export type LoginData = {
 
 export const registrationAction = async (data: RegistrationData) => {
   try {
-    // console.log(formData);
-    const { name, userName, email, password, role } = data;
+    const { data: valiadtedData, error } = registerUserSchema.safeParse(data);
+
+    if (error) {
+      return {
+        status: "ERROR",
+        message: error.issues[0].message,
+      };
+    }
+
+    const { name, userName, email, password, role } = valiadtedData;
 
     const [user] = await db
       .select()
