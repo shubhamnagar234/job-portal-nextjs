@@ -12,38 +12,27 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Lock, Mail, UserCheck } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail, UserCheck } from "lucide-react";
 import { toast } from "sonner";
 import { loginUserAction } from "@/features/auth/server/auth.actions";
-
-interface LoginFormData {
-  email: string;
-  password: string;
-}
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { LoginUserData, loginUserSchema } from "@/features/auth/auth.schema";
 
 const LoginForm: React.FC = () => {
-  const [formData, setFormData] = useState<LoginFormData>({
-    email: "",
-    password: "",
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginUserData>({
+    resolver: zodResolver(loginUserSchema),
+    mode: "onChange",
   });
+  const [showPassword, setShowPassword] = useState(false);
 
-  const handleInputChange = (name: string, value: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
-    e.preventDefault();
+  const onSubmit = async (data: LoginUserData) => {
     try {
-      // Here you would typically make your API call
-      const loginData = {
-        email: formData.email.trim(),
-        password: formData.password,
-      };
-
-      const result = await loginUserAction(loginData);
+      const result = await loginUserAction(data);
       if (result.status === "SUCCESS") toast.success(result.message);
       else toast.error(result.message);
     } catch (error) {
@@ -63,7 +52,7 @@ const LoginForm: React.FC = () => {
         </CardHeader>
 
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* Email Field */}
             <div className="space-y-2">
               <Label htmlFor="email">Email Address *</Label>
@@ -71,15 +60,20 @@ const LoginForm: React.FC = () => {
                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
                   id="email"
-                  name="email"
                   type="email"
                   placeholder="Enter your email"
                   required
-                  value={formData.email}
-                  onChange={(e) => handleInputChange("email", e.target.value)}
-                  className={`pl-10 `}
+                  {...register("email")}
+                  className={`pl-10 ${
+                    errors.email ? "border-destructive" : "border-muted"
+                  }`}
                 />
               </div>
+              {errors.email && (
+                <p className="text-sm text-destructive">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
 
             {/* Password Field */}
@@ -89,15 +83,13 @@ const LoginForm: React.FC = () => {
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
                   id="password"
-                  name="name"
                   type={"password"}
                   placeholder="Create a strong password"
                   required
-                  value={formData.password}
-                  onChange={(e) =>
-                    handleInputChange("password", e.target.value)
-                  }
-                  className={`pl-10 pr-10 `}
+                  {...register("password")}
+                  className={`pl-10 pr-10 ${
+                    errors.password ? "border-destructive" : "border-muted"
+                  }`}
                 />
 
                 <Button
@@ -105,8 +97,20 @@ const LoginForm: React.FC = () => {
                   variant="ghost"
                   size="sm"
                   className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                ></Button>
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? (
+                    <EyeOff className="w-4 h-4 text-muted-foreground" />
+                  ) : (
+                    <Eye className="w-4 h-4 text-muted-foreground" />
+                  )}
+                </Button>
               </div>
+              {errors.password && (
+                <p className="text-sm text-destructive">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
 
             {/* Submit Button */}
