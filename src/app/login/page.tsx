@@ -83,7 +83,7 @@ const LoginForm: React.FC = () => {
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
                   id="password"
-                  type={"password"}
+                  type={showPassword ? "text" : "password"}
                   placeholder="Create a strong password"
                   required
                   {...register("password")}
