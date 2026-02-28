@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/card";
 import { toast } from "sonner";
 import { Eye, EyeOff, Lock, Mail, User, UserCheck } from "lucide-react";
-import { registrationAction } from "@/features/auth/server/auth.actions";
+import { registerUserAction } from "@/features/auth/server/auth.actions";
 import { useForm } from "react-hook-form";
 import {
   RegisterUserDataWithConfirmPassword,
@@ -44,7 +44,7 @@ const Registration: React.FC = () => {
 
   const onSubmit = async (data: RegisterUserDataWithConfirmPassword) => {
     try {
-      const result = await registrationAction(data);
+      const result = await registerUserAction(data);
       if (result.status === "SUCCESS") toast.success(result.message);
       else toast.error(result.message);
     } catch (error) {
