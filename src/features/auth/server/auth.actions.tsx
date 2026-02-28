@@ -5,6 +5,7 @@ import { users } from "@/drizzle/schema";
 import argon2 from "argon2";
 import { eq, or } from "drizzle-orm";
 import { loginUserSchema, registerUserSchema } from "../auth.schema";
+import { createSessionAndSetCookies } from "./use-cases/sessions";
 
 export type RegistrationData = {
   name: string;
@@ -99,6 +100,8 @@ export const loginUserAction = async (data: LoginData) => {
         message: "Invalid Credentials",
       };
     }
+
+    await createSessionAndSetCookies(user.id);
 
     return {
       status: "SUCCESS",
