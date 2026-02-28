@@ -22,7 +22,7 @@ import {
 import { toast } from "sonner";
 import { Eye, EyeOff, Lock, Mail, User, UserCheck } from "lucide-react";
 import { registerUserAction } from "@/features/auth/server/auth.actions";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import {
   RegisterUserDataWithConfirmPassword,
   registerUserSchemaWithConfirmPassword,
@@ -33,7 +33,7 @@ const Registration: React.FC = () => {
   const {
     register,
     handleSubmit,
-    watch,
+    control,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(registerUserSchemaWithConfirmPassword),
@@ -137,19 +137,25 @@ const Registration: React.FC = () => {
             {/* Role Selection */}
             <div className="space-y-2 w-full">
               <Label htmlFor="role">I am a *</Label>
-              <Select {...register("role")}>
-                <SelectTrigger
-                  className={`w-full ${
-                    errors.role ? "border-destructive" : "border-muted"
-                  }`}
-                >
-                  <SelectValue placeholder="Select your role" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="applicant">Job Applicant</SelectItem>
-                  <SelectItem value="employer">Employer</SelectItem>
-                </SelectContent>
-              </Select>
+              <Controller
+                name="role"
+                control={control}
+                render={({field}) => (
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger
+                      className={`w-full ${
+                        errors.role ? "border-destructive" : "border-muted"
+                      }`}
+                    >
+                      <SelectValue placeholder="Select your role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="applicant">Job Applicant</SelectItem>
+                      <SelectItem value="employer">Employer</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
+              ></Controller>
               {errors.role && (
                 <p className="text-sm text-destructive">
                   {errors.role.message}
