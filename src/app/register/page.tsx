@@ -28,6 +28,7 @@ import {
   registerUserSchemaWithConfirmPassword,
 } from "@/features/auth/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/router";
 
 const Registration: React.FC = () => {
   const {
@@ -39,12 +40,20 @@ const Registration: React.FC = () => {
     resolver: zodResolver(registerUserSchemaWithConfirmPassword),
   });
 
+  const router = useRouter();
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const onSubmit = async (data: RegisterUserDataWithConfirmPassword) => {
     try {
       const result = await registerUserAction(data);
+
+      if (result.status === "SUCCESS") {
+        if (data.role === "employer") router.push("/employer-dashboard");
+        else router.push("/dashboard");
+      }
+
       if (result.status === "SUCCESS") toast.success(result.message);
       else toast.error(result.message);
     } catch (error) {
@@ -140,7 +149,7 @@ const Registration: React.FC = () => {
               <Controller
                 name="role"
                 control={control}
-                render={({field}) => (
+                render={({ field }) => (
                   <Select value={field.value} onValueChange={field.onChange}>
                     <SelectTrigger
                       className={`w-full ${
