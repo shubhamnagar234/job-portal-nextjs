@@ -28,7 +28,7 @@ import {
   registerUserSchemaWithConfirmPassword,
 } from "@/features/auth/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 const Registration: React.FC = () => {
   const {

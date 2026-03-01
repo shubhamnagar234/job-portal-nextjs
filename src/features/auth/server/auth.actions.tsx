@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/config/db";
-import { users } from "@/drizzle/schema";
+import { applicants, employers, users } from "@/drizzle/schema";
 import argon2 from "argon2";
 import { eq, or } from "drizzle-orm";
 import { loginUserSchema, registerUserSchema } from "../auth.schema";
@@ -61,6 +61,12 @@ export const registerUserAction = async (data: RegisterData) => {
     const [result] = await db
       .insert(users)
       .values({ name, userName, email, password: hashPassword, role });
+
+    if (role === "applicant") {
+      await db.insert(applicants).values({ id: result.insertId });
+    } else {
+      await db.insert(employers ).values({ id: result.insertId });
+    }
 
     await createSessionAndSetCookies(result.insertId);
 
@@ -126,7 +132,7 @@ export const logoutUserAction = async () => {
   const cookieStore = await cookies();
   const session = cookieStore.get("session")?.value;
 
-  if(!session) return redirect("/login");
+  if (!session) return redirect("/login");
 
   if (session) {
     const hashedToken = crypto
