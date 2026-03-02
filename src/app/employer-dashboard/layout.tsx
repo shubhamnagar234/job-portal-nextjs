@@ -1,5 +1,6 @@
 import { getCurrentUser } from "@/features/auth/server/auth.queries";
 import { redirect } from "next/navigation";
+import EmployerSidebar from "../../features/employers/components/employer-sidebar";
 
 export default async function DashboardLayout({
   children,
@@ -11,5 +12,10 @@ export default async function DashboardLayout({
 
   if (user.role !== "employer") return redirect("/dashboard");
 
-  return <>{children}</>;
+  return (
+    <div className="flex min-h-screen bg-background">
+      <EmployerSidebar />
+      <main className="container mx-auto mt-5 ml-70 mr-5">{children}</main>
+    </div>
+  );
 }
