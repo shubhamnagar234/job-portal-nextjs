@@ -21,8 +21,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { updateEmployerProfileAction } from "@/features/server/employer.action";
+import { toast } from "sonner";
 
-const organizationTypeOptions = ["development", "business", "design"] as const;
+const organizationTypeOptions = [
+  "development",
+  "business",
+  "design",
+  "android dev",
+  "cloud business",
+] as const;
 type OrganizationType = (typeof organizationTypeOptions)[number];
 
 const teamSizeOptions = ["1-5", "6-20", "21-50"] as const;
@@ -61,8 +69,15 @@ interface IFormInput {
 const EmployerSettingsForm = () => {
   const { register, handleSubmit, control } = useForm<IFormInput>();
 
-  const handleFormSubmit = (data: IFormInput) => {
+  const handleFormSubmit = async (data: IFormInput) => {
     console.log("data: ", data);
+
+    const response = await updateEmployerProfileAction(data);
+    if (response.status === "SUCCESS") {
+      toast.success(response.message);
+    } else {
+      toast.error(response.message);
+    }
   };
 
   return (
