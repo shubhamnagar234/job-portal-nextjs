@@ -9,11 +9,11 @@ import {
 } from "@/components/ui/item";
 import Link from "next/link";
 import { ShieldAlertIcon } from "lucide-react";
-import { getCurrentEmployeeDetails } from "@/features/server/employers.queries";
+import { getCurrentEmployerDetails } from "@/features/server/employers.queries";
 import { redirect } from "next/navigation";
 
 export async function EmployerProfileCompletionStatus() {
-  const currentEmployer = await getCurrentEmployeeDetails();
+  const currentEmployer = await getCurrentEmployerDetails();
 
   if (!currentEmployer) return redirect("/login");
 

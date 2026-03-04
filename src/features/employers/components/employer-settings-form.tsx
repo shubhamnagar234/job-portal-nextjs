@@ -31,13 +31,24 @@ import {
 } from "../employers.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const EmployerSettingsForm = () => {
+const EmployerSettingsForm = ({initialData}: {
+  initialData: Partial<EmployerProfileData>;
+}) => {
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
   } = useForm<EmployerProfileData>({
+    defaultValues: {
+      name: initialData.name || "",
+      description: initialData.description || "",
+      organizationType: initialData.organizationType || undefined,
+      teamSize: initialData.teamSize || undefined,
+      yearOfEstablishment: initialData.yearOfEstablishment || "",
+      websiteUrl: initialData.websiteUrl || "",
+      location: initialData.location || "",
+    },
     resolver: zodResolver(employerProfileSchema),
   });
 
