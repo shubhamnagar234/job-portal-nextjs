@@ -11,6 +11,7 @@ import {
   Calendar,
   FileText,
   Globe,
+  Loader,
   MapPin,
 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
@@ -31,14 +32,16 @@ import {
 } from "../employers.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const EmployerSettingsForm = ({initialData}: {
+const EmployerSettingsForm = ({
+  initialData,
+}: {
   initialData: Partial<EmployerProfileData>;
 }) => {
   const {
     register,
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isDirty, isSubmitting },
   } = useForm<EmployerProfileData>({
     defaultValues: {
       name: initialData.name || "",
@@ -243,7 +246,18 @@ const EmployerSettingsForm = ({initialData}: {
               </p>
             )}
           </div>
-          <Button type="submit">Save Changes</Button>
+          <div className="flex items-center gap-4 pt-4">
+            <Button type="submit">
+              {" "}
+              {isSubmitting && <Loader className="w-4 h-4 animate-spin" />}
+              {isSubmitting ? "Saving..." : "Save Changes"}
+            </Button>
+            {isDirty && (
+              <p className="text-sm text-muted-foreground">
+                No changes to save
+              </p>
+            )}
+          </div>
         </form>
       </CardContent>
     </Card>
