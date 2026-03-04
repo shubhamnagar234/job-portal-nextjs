@@ -3,7 +3,7 @@ import { getCurrentUser } from "../auth/server/auth.queries";
 import { employers } from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
 
-export const getCurrentEmployeeDetails = async () => {
+export const getCurrentEmployerDetails = async () => {
   const currentUser = await getCurrentUser();
   if (!currentUser) return;
 
@@ -23,5 +23,5 @@ export const getCurrentEmployeeDetails = async () => {
     employer.organizationType &&
     employer.yearOfEstablishment;
 
-  return { ...currentUser, employeeDetails: employer, isProfileCompleted };
+  return { ...currentUser, employerDetails: employer, isProfileCompleted };
 };
