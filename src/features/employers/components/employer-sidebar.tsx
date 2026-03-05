@@ -43,6 +43,7 @@ const EmployerSidebar = () => {
     pathname: string;
     base?: string;
   }) {
+    if (!href || href === "#") return false;
     const normalizedHref = href.replace(/\/$/, "") || "/";
 
     // URLPattern is a built-in browser API that lets you define URL matching patterns using a template-like syntax.
