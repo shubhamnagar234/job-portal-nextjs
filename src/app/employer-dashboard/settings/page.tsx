@@ -11,14 +11,14 @@ const EmployerSettings = async () => {
     <div>
       <EmployerSettingsForm
         initialData={{
-          name: employer.employerDetails.name,
-          description: employer.employerDetails.description,
-          organizationType: employer.employerDetails.organizationType,
-          teamSize: employer.employerDetails.teamSize,
-          location: employer.employerDetails.location,
-          websiteUrl: employer.employerDetails.websiteUrl,
+          name: employer.employerDetails?.name || "",
+          description: employer.employerDetails?.description || "",
+          organizationType: employer.employerDetails?.organizationType,
+          teamSize: employer.employerDetails?.teamSize,
+          location: employer.employerDetails?.location || "",
+          websiteUrl: employer.employerDetails?.websiteUrl || "",
           yearOfEstablishment:
-            employer.employerDetails.yearOfEstablishment?.toString(),
+            employer.employerDetails?.yearOfEstablishment?.toString() || "",
         }}
       />
     </div>

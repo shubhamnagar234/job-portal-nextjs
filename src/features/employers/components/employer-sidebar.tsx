@@ -1,6 +1,7 @@
 "use client";
 
 import { logoutUserAction } from "@/features/auth/server/auth.actions";
+import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
   User,
@@ -13,6 +14,7 @@ import {
   LogOut,
 } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const base = "/employer-dashboard";
 
@@ -28,6 +30,30 @@ const navigationItems = [
 ];
 
 const EmployerSidebar = () => {
+  const pathname = usePathname();
+  console.log("usepathname: ", pathname);
+
+  // to check the link of the matching sidebar
+  function isLinkActive({
+    href,
+    pathname,
+    base = "/",
+  }: {
+    href: string;
+    pathname: string;
+    base?: string;
+  }) {
+    if (!href || href === "#") return false;
+    const normalizedHref = href.replace(/\/$/, "") || "/";
+
+    // URLPattern is a built-in browser API that lets you define URL matching patterns using a template-like syntax.
+
+    const pattern = new URLPattern({
+      pathname: normalizedHref === base ? base : `${normalizedHref}{/*}?`,
+    });
+    return pattern.test({ pathname });
+  }
+
   return (
     <div className="w-64 bg-card border-r border-border fixed bottom-0 top-0">
       <div className="p-6">
@@ -43,7 +69,14 @@ const EmployerSidebar = () => {
             <Link
               key={curNav.name}
               href={curNav.href || "#"}
-              className=" flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-colors"
+              className={cn(
+                "flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-colors",
+                isLinkActive({
+                  href: curNav.href || "#",
+                  pathname,
+                  base: "/employer-dashboard",
+                }) && "text-primary bg-blue-300",
+              )}
             >
               <Icon />
               {curNav.name}
