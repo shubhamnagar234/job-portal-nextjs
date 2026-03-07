@@ -30,6 +30,7 @@ import {
 } from "../employers.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Tiptap from "@/components/text-editor";
+import { UploadButton } from "@/lib/uploadthing";
 
 const EmployerSettingsForm = ({
   initialData,
@@ -69,6 +70,20 @@ const EmployerSettingsForm = ({
     <Card className="w-3/4 ">
       <CardContent>
         <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
+          <div>
+            <UploadButton
+              endpoint="imageUploader"
+              onClientUploadComplete={(res) => {
+                // Do something with the response
+                console.log("Files: ", res);
+                alert("Upload Completed");
+              }}
+              onUploadError={(error: Error) => {
+                // Do something with the error.
+                alert(`ERROR! ${error.message}`);
+              }}
+            />
+          </div>
           {/* <div className="grid w-full max-w-sm items-center gap-3">
             <Label htmlFor="username">username</Label>
             <Input id="username" type="text" {...register("username")} />
